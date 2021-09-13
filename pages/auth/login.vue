@@ -7,7 +7,7 @@
       style="width: 500px; max-width: 90%"
     >
       <v-card-title class="justify-space-between font-weight-bold">
-        OmCTF.Sib
+        {{ competitionName }}
         <v-btn to="/scoreboard" icon dense>
           <v-icon dense>
             mdi-trophy
@@ -37,7 +37,14 @@
         <v-btn block style="color: #20c20e" outlined @click="login">
           Войти
         </v-btn>
-        <v-btn block outlined to="/auth/signup" class="mt-4" color="warning">
+        <v-btn
+          block
+          outlined
+          to="/auth/signup"
+          class="mt-4"
+          color="warning"
+          :disabled="!competitionStarted"
+        >
           Регистрация
         </v-btn>
       </v-card-text>
@@ -46,6 +53,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data: () => ({
     form: {
@@ -54,6 +63,12 @@ export default {
     },
     errors: {},
   }),
+  computed: {
+    ...mapGetters({
+      competitionName: 'competitionName',
+      competitionStarted: 'is_started',
+    }),
+  },
   methods: {
     async login () {
       this.errors = {}

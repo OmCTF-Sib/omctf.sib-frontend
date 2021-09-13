@@ -70,7 +70,14 @@
           </div>
         </div>
 
-        <v-btn block color="warning" outlined class="mt-4" @click="addParticipant">
+        <v-btn
+          v-if="form.participants.length <= maxParticipants"
+          block
+          color="warning"
+          outlined
+          class="mt-4"
+          @click="addParticipant"
+        >
           Добавить участника
         </v-btn>
 
@@ -83,6 +90,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   data: () => ({
     form: {
@@ -102,6 +111,11 @@ export default {
       { text: 'Опытные', value: 'experienced' },
     ],
   }),
+  computed: {
+    ...mapGetters({
+      maxParticipants: 'maxParticipants',
+    }),
+  },
   methods: {
     async signup () {
       this.errors = {
