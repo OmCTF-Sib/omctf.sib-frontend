@@ -18,9 +18,7 @@ export default {
   css: [
     '~/assets/main.scss',
   ],
-  plugins: [
-    { src: '~/plugins/vue-notifcations', mode: 'client' },
-  ],
+  plugins: [],
   components: true,
   buildModules: [
     '@nuxtjs/eslint-module',

@@ -5,29 +5,8 @@
       <v-chip :color="type == null ? `primary` : `default`" @click="type = null">
         Все
       </v-chip>
-      <v-chip :color="type == `web` ? `primary` : `default`" @click="type = 'web'">
-        WEB
-      </v-chip>
-      <v-chip :color="type == `reverse` ? `primary` : `default`" @click="type = 'reverse'">
-        REVERSE
-      </v-chip>
-      <v-chip :color="type == `crypto` ? `primary` : `default`" @click="type = 'crypto'">
-        CRYPTO
-      </v-chip>
-      <v-chip :color="type == `forensic` ? `primary` : `default`" @click="type = 'forensic'">
-        FORENSIC
-      </v-chip>
-      <v-chip :color="type == `recon` ? `primary` : `default`" @click="type = 'recon'">
-        RECON
-      </v-chip>
-      <v-chip :color="type == `ppc` ? `primary` : `default`" @click="type = 'ppc'">
-        PPC
-      </v-chip>
-      <v-chip :color="type == `stego` ? `primary` : `default`" @click="type = 'stego'">
-        STEGO
-      </v-chip>
-      <v-chip :color="type == `joy` ? `primary` : `default`" @click="type = 'joy'">
-        JOY
+      <v-chip v-for="category in categories" :key="category.name" :color="type == category.name ? `primary` : `default`" @click="type = category.name">
+        {{ category.name.toUpperCase() }}
       </v-chip>
     </div>
 
@@ -41,7 +20,7 @@
               </v-chip>
             </div>
             <div :style="task.is_solved ? `text-decoration: line-through` : null">
-              {{ task.title }}
+              {{ task.name }}
             </div>
           </v-card-title>
           <v-card-text class="d-flex justify-space-between">
@@ -55,15 +34,23 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   layout: 'forum',
-  async asyncData ({ $axios }) {
-    const { data } = await $axios.get(`${process.env.BASE_API_URL}/api/v1/tasks/`)
-    return { tasks: data }
+  async fetch () {
+    await this.$store.dispatch('tasks/GET_CATEGORIES')
+    await this.$store.dispatch('tasks/GET_TASKS', {})
   },
   data: () => ({
     type: null,
   }),
+  computed: {
+    ...mapGetters({
+      categories: 'tasks/categories',
+      tasks: 'tasks/tasks',
+    }),
+  },
   watch: {
     type () {
       this.filterTasks()
@@ -75,8 +62,7 @@ export default {
       if (this.type) {
         params.type = this.type.toUpperCase()
       }
-      const { data } = await this.$axios.get(`${process.env.BASE_API_URL}/api/v1/tasks/`, { params })
-      this.tasks = data
+      await this.$store.dispatch('tasks/GET_TASKS', params)
     },
     getTags (tags) {
       return tags.split(',')
