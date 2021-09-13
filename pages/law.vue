@@ -1,6 +1,6 @@
 <template>
   <v-container class="mt-12">
-    <h1 class="ZmxhZ3s4NTc4ZmFlMmQ0OGQ4Yjg4ZGFhZjk0NzI5NGZlYWEzNX0=">
+    <h1>
       Правила
     </h1>
 
