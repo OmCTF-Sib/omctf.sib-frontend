@@ -7,7 +7,7 @@
       style="width: 500px; max-width: 90%"
     >
       <v-card-title class="justify-space-between font-weight-bold">
-        OmCTF.Sib
+        {{ competitionName }}
         <v-btn to="/scoreboard" icon dense>
           <v-icon dense>
             mdi-trophy
@@ -136,6 +136,7 @@ export default {
   }),
   computed: {
     ...mapGetters({
+      competitionName: 'competitionName',
       maxParticipants: 'maxParticipants',
     }),
   },
@@ -146,7 +147,7 @@ export default {
       }
       await this.$axios.post('/api/v1/auth/users/', this.form).then(
         () => {
-          this.$router.push('/')
+          this.$router.push('/signup/success')
         },
         err => {
           this.errors = err.response.data
