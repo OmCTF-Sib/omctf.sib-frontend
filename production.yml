@@ -1,0 +1,18 @@
+version: "3.6"
+
+services:
+  frontend:
+    build: .
+    networks:
+      - ctf
+    container_name: ctf_frontend
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.front_service.loadbalancer.server.port=80
+      - traefik.http.routers.front.rule=Host(`example.com`)
+      - traefik.http.routers.front.entrypoints=websecure,web
+      - traefik.http.routers.front.tls.certresolver=myresolver
+
+networks:
+  ctf:
+    name: ctf_network
