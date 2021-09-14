@@ -66,7 +66,11 @@
             outlined
             dense
             hide-details
-            :error-messages="errors.participants[idx] ? errors.participants[idx].name : ''"
+            :error-messages="
+              errors.participants
+                ? errors.participants[idx] ? errors.participants[idx].name : null
+                : null
+            "
           />
           <v-text-field
             v-if="idx==0"
@@ -76,7 +80,11 @@
             outlined
             dense
             hide-details
-            :error-messages="errors.participants[idx] ? errors.participants[idx].email : ''"
+            :error-messages="
+              errors.participants
+                ? errors.participants[idx] ? errors.participants[idx].email : null
+                : null
+            "
           />
           <div style="display: flex; justify-content: flex-end">
             <v-btn v-if="idx > 0" color="error" outlined class="mt-4" @click="removeParticipant(idx)">
@@ -147,7 +155,7 @@ export default {
       }
       await this.$axios.post('/api/v1/auth/users/', this.form).then(
         () => {
-          this.$router.push('/signup/success')
+          this.$router.push('/auth/signup/success')
         },
         err => {
           this.errors = err.response.data
