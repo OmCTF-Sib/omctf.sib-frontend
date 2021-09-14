@@ -21,6 +21,7 @@
           outlined
           dense
           :error-messages="errors.name || errors.non_field_errors"
+          :disabled="!competitionStarted"
           @blur="errors.name=''"
           @keydown.enter="login"
         />
@@ -31,10 +32,11 @@
           outlined
           dense
           :error-messages="errors.password || errors.non_field_errors"
+          :disabled="!competitionStarted"
           @blur="errors.password=''"
           @keydown.enter="login"
         />
-        <v-btn block style="color: #20c20e" outlined @click="login">
+        <v-btn block style="color: #20c20e" outlined :disabled="!competitionStarted" @click="login">
           Войти
         </v-btn>
         <v-btn
@@ -43,7 +45,6 @@
           to="/auth/signup"
           class="mt-4"
           color="warning"
-          :disabled="!competitionStarted"
         >
           Регистрация
         </v-btn>
@@ -66,7 +67,7 @@ export default {
   computed: {
     ...mapGetters({
       competitionName: 'competitionName',
-      competitionStarted: 'is_started',
+      competitionStarted: 'competitionStarted',
     }),
   },
   methods: {

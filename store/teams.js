@@ -8,7 +8,7 @@ export const mutations = {
 }
 export const actions = {
   async GET_TEAMS ({ commit }, params) {
-    const { data } = await this.$axios.get('/api/v1/notifications/', { params })
+    const { data } = await this.$axios.get('/api/v1/teams/', { params })
     commit('SET_TEAMS', data)
   },
 }

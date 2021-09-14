@@ -48,7 +48,7 @@
               {{ team.name }}
             </td>
             <td style="font-size: 16px;">
-              {{ team.type }}
+              {{ categories[team.team_type] }}
             </td>
             <td style="font-size: 16px;">
               {{ team.score }}
@@ -76,6 +76,10 @@ export default {
   data: () => ({
     type: null,
     interval: null,
+    categories: {
+      newbies: 'Новички',
+      experienced: 'Опытные',
+    },
   }),
   computed: {
     ...mapGetters({
@@ -99,7 +103,7 @@ export default {
     async filterScoreboard () {
       const params = {}
       if (this.type) {
-        params.type = this.type
+        params.team_type = this.type
       }
 
       await this.$store.dispatch('teams/GET_TEAMS', params)
