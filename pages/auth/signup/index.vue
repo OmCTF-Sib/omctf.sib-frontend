@@ -48,8 +48,17 @@
           :error-messages="errors.university"
         />
 
+        <v-select
+          v-model="form.pc_count"
+          label="Какое кол-во ПК нужно предоставить команде от организаторов"
+          outlined
+          dense
+          :items="pc_count"
+          :error-messages="errors.pc_count"
+        />
+
         <div v-for="participant, idx in form.participants" :key="idx">
-          Участник {{ idx + 1 }}
+          Участник {{ idx + 1 }} <span v-if="idx === 0">(Капитан команды)</span>
           <v-divider class="mb-2" />
           <v-text-field
             v-model="participant.name"
@@ -59,11 +68,17 @@
             hide-details
             :error-messages="errors.participants[idx] ? errors.participants[idx].name : ''"
           />
-          <div style="display: flex; justify-content: space-between">
-            <v-checkbox
-              v-model="participant.is_captain"
-              label="Капитан команды"
-            />
+          <v-text-field
+            v-if="idx==0"
+            v-model="participant.email"
+            class="my-4"
+            label="Email"
+            outlined
+            dense
+            hide-details
+            :error-messages="errors.participants[idx] ? errors.participants[idx].email : ''"
+          />
+          <div style="display: flex; justify-content: flex-end">
             <v-btn v-if="idx > 0" color="error" outlined class="mt-4" @click="removeParticipant(idx)">
               Удалить
             </v-btn>
@@ -71,7 +86,7 @@
         </div>
 
         <v-btn
-          v-if="form.participants.length <= maxParticipants"
+          v-if="form.participants.length < maxParticipants"
           block
           color="warning"
           outlined
@@ -99,16 +114,24 @@ export default {
       password: '',
       university: '',
       team_type: '',
+      pc_count: 0,
       participants: [
-        { name: '', is_captain: false },
+        { name: '', email: '', is_captain: true },
       ],
     },
     errors: {
       participants: [],
     },
     team_types: [
-      { text: 'Новички', value: 'newbies' },
-      { text: 'Опытные', value: 'experienced' },
+      { text: 'Новички (команда, состоящая ТОЛЬКО из студентов первого курса)', value: 'newbies' },
+      { text: 'Опытные  (команда, состоящая студентов второго курса и старше, либо смешанная команда)', value: 'experienced' },
+    ],
+    pc_count: [
+      { text: 'Не нужно', value: 0 },
+      { text: 'Один', value: 1 },
+      { text: 'Два', value: 2 },
+      { text: 'Три', value: 3 },
+      { text: 'Четыре', value: 4 },
     ],
   }),
   computed: {
@@ -133,6 +156,7 @@ export default {
     addParticipant () {
       this.form.participants.push({
         name: '',
+        email: null,
         is_captain: false,
       })
     },
